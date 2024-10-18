@@ -52,22 +52,15 @@ class Budget:
   def add_expenses_to_category(self, category_name, value, description):
     for category in self.category:
       if category.name == category_name:
-        category.add_expense(value, description)
-        print(f"Ausgabe mit dem Betrag: {value} zur Kategorie '{category_name}' erfolgreich hinzugefügt")
+        category.add_new_expense(value, description)
         return
-    print(f"Kategorie: '{category_name}' existiert nicht!")
-    create_category = input(f">Möchtest du eine Kategorie mit dem Namen '{category_name}' erstellen? (ja/nein)")
-    if create_category == "ja":
-      limit = input(">Gib bitte das Limit an: ")
-      new_category = Budget_Category(name=category_name, limit=limit)
-      new_category.add_expense(value=value, description=description)
-      new_category.insert_expense_to_database(value=value, description=description)
-      self.category.append(new_category)
-      print(f"Kategorie: {new_category.name} erfolgreich erstellt")
-    elif create_category == "nein":
-      print("ok dann nicht")
-    else: 
-      return
+
+    new_category = Budget_Category(name=category_name, limit=100.0)
+    new_category.insert_category_to_database()
+    new_category.add_expense(value=value, description=description)
+    new_category.insert_expense_to_database(value=value, description=description)
+    self.category.append(new_category)
+
   
 
   
