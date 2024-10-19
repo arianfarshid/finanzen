@@ -18,6 +18,16 @@ class MainWindow(QMainWindow):
         self.dialog_description_label = QLabel()
         self.dialog_value_label = QLabel()
 
+        self.scroll_area_widget_0 = QWidget()
+        self.vertical_layout_0 = QVBoxLayout(self.scroll_area_widget_0)
+
+        self.excess_label = QLabel()
+        self.expenses_label = QLabel()
+        self.revenue_label = QLabel()
+
+        self.main_font = QFont()
+        
+
         super().__init__(*args, **kwargs)
 
         self.setWindowTitle('Finanzenverwaltung')
@@ -47,8 +57,8 @@ class MainWindow(QMainWindow):
         main_layout.insertWidget(1, welcome)
 
         # Main Font
-        main_font = QFont()
-        main_font.setPointSize(15)
+        
+        self.main_font.setPointSize(15)
 
         # Überschuss und Einnahmen
         label_stylesheet = 'background-color: #32686d;' + 'border-radius: 6px;'
@@ -60,23 +70,23 @@ class MainWindow(QMainWindow):
         horizontal_layout_revenue = QHBoxLayout(horizontal_layout_revenue_widget)
         main_layout.insertWidget(2, horizontal_layout_revenue_widget)
 
-        revenue_label = QLabel('Einnahmen: ' + str(revenue) + '€', self)
-        revenue_label.setFont(welcome_font)
-        revenue_label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
-        revenue_label.setStyleSheet(label_stylesheet)
-        horizontal_layout_revenue.insertWidget(0, revenue_label)
+        self.revenue_label.setText('Einnahmen: ' + str(revenue) + '€')
+        self.revenue_label.setFont(welcome_font)
+        self.revenue_label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        self.revenue_label.setStyleSheet(label_stylesheet)
+        horizontal_layout_revenue.insertWidget(0, self.revenue_label)
 
-        expenses_label = QLabel('Ausgaben: ' + str(expenses) + '€', self)
-        expenses_label.setFont(welcome_font)
-        expenses_label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
-        expenses_label.setStyleSheet(label_stylesheet)
-        horizontal_layout_revenue.insertWidget(1, expenses_label)
+        self.expenses_label.setText('Ausgaben: ' + str(expenses) + '€')
+        self.expenses_label.setFont(welcome_font)
+        self.expenses_label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        self.expenses_label.setStyleSheet(label_stylesheet)
+        horizontal_layout_revenue.insertWidget(1, self.expenses_label)
 
-        excess_label = QLabel('Überschuss: ' + str(excess) + '€', self)
-        excess_label.setFont(welcome_font)
-        excess_label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
-        excess_label.setStyleSheet(label_stylesheet)
-        horizontal_layout_revenue.insertWidget(2, excess_label)
+        self.excess_label.setText('Überschuss: ' + str(excess) + '€')
+        self.excess_label.setFont(welcome_font)
+        self.excess_label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
+        self.excess_label.setStyleSheet(label_stylesheet)
+        horizontal_layout_revenue.insertWidget(2, self.excess_label)
 
         horizontal_layout_revenue_widget.setStyleSheet('background-color: lightblue; color: black;')
         
@@ -93,13 +103,11 @@ class MainWindow(QMainWindow):
         vertical_layout_widget_2 = QWidget()
 
 
-        scroll_area_widget_0 = QWidget()
         scroll_area_0 = QScrollArea()
         scroll_area_0.setWidgetResizable(True)
-        scroll_area_0.setWidget(scroll_area_widget_0)
+        scroll_area_0.setWidget(self.scroll_area_widget_0)
         
 
-        vertical_layout_0 = QVBoxLayout(scroll_area_widget_0)
         vertical_layout_1 = QVBoxLayout(vertical_layout_widget_1)
         vertical_layout_2 = QVBoxLayout(vertical_layout_widget_2)
 
@@ -109,36 +117,13 @@ class MainWindow(QMainWindow):
         horizontal_layout.insertWidget(2, vertical_layout_widget_2)
 
         layout_background = 'background-color: #32686d; border-radius: 6px'
-        scroll_area_widget_0.setStyleSheet(layout_background)
+        self.scroll_area_widget_0.setStyleSheet(layout_background)
         vertical_layout_widget_1.setStyleSheet(layout_background)
         vertical_layout_widget_2.setStyleSheet(layout_background)
 
         #----------First Column---------------------------
 
-        index = 0
-        for category in budget.category:
-            tmp_vertical_layout_widget = QWidget()
-            tmp_vertical_layout = QVBoxLayout(tmp_vertical_layout_widget)
-            tmp_vertical_layout_widget.setStyleSheet('background-color: #43ba88;' + 'border-radius: 6px;')
-            category_name = category.name
-            limit = category.limit
-            tmp_label = QLabel(F"{category_name}")
-            tmp_expenses_layout_widget = QWidget()
-            tmp_expenses_layout = QVBoxLayout(tmp_expenses_layout_widget)
-            tmp_expenses_layout_widget.setStyleSheet('background-color: #9fcace;' + 'border-radius: 6px;')
-            tmp_label.setFont(main_font)
-            tmp_vertical_layout.insertWidget(0, tmp_label)
-            tmp_vertical_layout.insertWidget(1, tmp_expenses_layout_widget)
-            vertical_layout_0.insertWidget(index, tmp_vertical_layout_widget)
-            expenses_index = 0
-            for expense in category.expenses:
-                value = expense[0]
-                description = expense[1]
-                tmp_expense_label = QLabel(f"{description}: {value}€")
-                tmp_expense_label.setFont(main_font)
-                tmp_expenses_layout.insertWidget(expenses_index, tmp_expense_label)
-                expenses_index =+ 1
-            index =+ 1
+        self.draw_categories()
 
         #-------------------second column-------------------
         headline_label = QLabel('Visaulisierung')
@@ -162,10 +147,10 @@ class MainWindow(QMainWindow):
         category_layout_widget.setStyleSheet('background-color: #43ba88;')
 
         category_label = QLabel('Geben Sie die Kategorie Ihrer Buchung ein')
-        category_label.setFont(main_font)
+        category_label.setFont(self.main_font)
 
         self.category_lineEdit.setPlaceholderText('Kategorie ...')
-        self.category_lineEdit.setFont(main_font)
+        self.category_lineEdit.setFont(self.main_font)
         self.category_lineEdit.setStyleSheet('background-color: #9fcace; padding: 5px;')
 
         category_layout.insertWidget(0, category_label)
@@ -177,10 +162,10 @@ class MainWindow(QMainWindow):
         description_layout_widget.setStyleSheet('background-color: #43ba88;')
 
         description_label = QLabel('Geben Sie die Beschreibung Ihrer Buchung ein')
-        description_label.setFont(main_font)
+        description_label.setFont(self.main_font)
 
         self.description_lineEdit.setPlaceholderText('Beschreibung ...')
-        self.description_lineEdit.setFont(main_font)
+        self.description_lineEdit.setFont(self.main_font)
         self.description_lineEdit.setStyleSheet('background-color: #9fcace; padding: 5px;')
 
         description_layout.insertWidget(0, description_label)
@@ -192,10 +177,10 @@ class MainWindow(QMainWindow):
         value_layout_widget.setStyleSheet('background-color: #43ba88;')
 
         value_label = QLabel('Geben Sie den Betrag der Buchung ein')
-        value_label.setFont(main_font)
+        value_label.setFont(self.main_font)
 
         self.value_lineEdit.setPlaceholderText('Betrag ...')
-        self.value_lineEdit.setFont(main_font)
+        self.value_lineEdit.setFont(self.main_font)
         self.value_lineEdit.setStyleSheet('background-color: #9fcace; padding: 5px;')
 
         value_layout.insertWidget(0, value_label)
@@ -203,7 +188,7 @@ class MainWindow(QMainWindow):
 
         button = QPushButton()
         button.setText("Hinzufügen")
-        button.setFont(main_font)
+        button.setFont(self.main_font)
         button.setStyleSheet('background-color: #48a886; padding: 8px;')
         button.clicked.connect(self.show_dialog)
 
@@ -263,6 +248,8 @@ class MainWindow(QMainWindow):
         value = float(self.value_lineEdit.text())
         
         budget.add_expenses_to_category(category_name, value, description)
+        self.draw_categories()
+        self.update_revenue()
         
         self.clear_lineEdits()
         self.dialog.accept()
@@ -272,6 +259,46 @@ class MainWindow(QMainWindow):
         self.category_lineEdit.clear()
         self.description_lineEdit.clear()
         self.value_lineEdit.clear()
+
+    def draw_categories(self):
+        index = 0
+        for category in budget.category:
+            tmp_vertical_layout_widget = QWidget()
+            tmp_vertical_layout = QVBoxLayout(tmp_vertical_layout_widget)
+            tmp_vertical_layout_widget.setStyleSheet('background-color: #43ba88;' + 'border-radius: 6px;')
+            category_name = category.name
+            limit = category.limit
+            tmp_label = QLabel(F"{category_name}")
+            tmp_expenses_layout_widget = QWidget()
+            tmp_expenses_layout = QVBoxLayout(tmp_expenses_layout_widget)
+            tmp_expenses_layout_widget.setStyleSheet('background-color: #9fcace;' + 'border-radius: 6px;')
+            tmp_label.setFont(self.main_font)
+            tmp_vertical_layout.insertWidget(0, tmp_label)
+            tmp_vertical_layout.insertWidget(1, tmp_expenses_layout_widget)
+            self.vertical_layout_0.insertWidget(index, tmp_vertical_layout_widget)
+            expenses_index = 0
+            for expense in category.expenses:
+                value = expense[0]
+                description = expense[1]
+                tmp_horizontal_layout_widget = QWidget()
+                tmp_horizontal_layout = QHBoxLayout(tmp_horizontal_layout_widget)
+                tmp_expense_description_label = QLabel(f"{description}")
+                tmp_expense_value_label = QLabel(f"{value}€")
+                tmp_expense_description_label.setFont(self.main_font)
+                tmp_expense_value_label.setFont(self.main_font)
+                tmp_expense_value_label.setAlignment(Qt.AlignmentFlag.AlignRight)
+                tmp_horizontal_layout.insertWidget(0, tmp_expense_description_label)
+                tmp_horizontal_layout.insertWidget(1, tmp_expense_value_label)
+                tmp_expenses_layout.insertWidget(expenses_index, tmp_horizontal_layout_widget)
+                expenses_index =+ 1
+            index =+ 1
+    
+    def update_revenue(self):
+        excess = budget.get_excess()
+        expenses = budget.get_total_expenditure()
+
+        self.excess_label.setText('Überschuss: ' + str(excess) + '€')
+        self.expenses_label.setText('Ausgaben: ' + str(expenses) + '€')
 
 
 
