@@ -60,9 +60,6 @@ class Budget:
     new_category.add_expense(value=value, description=description)
     new_category.insert_expense_to_database(value=value, description=description)
     self.category.append(new_category)
-
-  
-
   
   def get_total_expenditure(self):
     total = 0
