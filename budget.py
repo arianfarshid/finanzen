@@ -68,6 +68,6 @@ class Budget:
     return total
 
   def get_excess(self):
-    return self.revenue - self.get_total_expenditure()
+    return round(self.revenue - self.get_total_expenditure(), 2)
 
 
