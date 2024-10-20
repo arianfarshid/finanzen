@@ -267,13 +267,20 @@ class MainWindow(QMainWindow):
             tmp_vertical_layout = QVBoxLayout(tmp_vertical_layout_widget)
             tmp_vertical_layout_widget.setStyleSheet('background-color: #43ba88;' + 'border-radius: 6px;')
             category_name = category.name
-            limit = category.limit
+            total = category.get_total_expenditure()
+            total_label = QLabel(f"{round(total, 2)}€")
             tmp_label = QLabel(F"{category_name}")
+            tmp_headline_layout_widget = QWidget()
+            tmp_headline_layout = QHBoxLayout(tmp_headline_layout_widget)
+            tmp_headline_layout.insertWidget(0, tmp_label)
+            tmp_headline_layout.insertWidget(1, total_label)
             tmp_expenses_layout_widget = QWidget()
             tmp_expenses_layout = QVBoxLayout(tmp_expenses_layout_widget)
             tmp_expenses_layout_widget.setStyleSheet('background-color: #9fcace;' + 'border-radius: 6px;')
             tmp_label.setFont(self.main_font)
-            tmp_vertical_layout.insertWidget(0, tmp_label)
+            total_label.setFont(self.main_font)
+            total_label.setAlignment(Qt.AlignmentFlag.AlignRight)
+            tmp_vertical_layout.insertWidget(0, tmp_headline_layout_widget)
             tmp_vertical_layout.insertWidget(1, tmp_expenses_layout_widget)
             self.vertical_layout_0.insertWidget(index, tmp_vertical_layout_widget)
             expenses_index = 0
